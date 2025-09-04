@@ -29,6 +29,9 @@ const getVehicleType = async (req, res) => {
         }
 
         const vehicles = await VehicleType.findAll({ where: { wheelId: id } });
+    console.log("Vehicle type",vehicles);
+
+        
         return res.status(200).json({
             success: true,
             data: vehicles,
@@ -55,6 +58,9 @@ const getVehicleModal = async (req, res) => {
         const vehiclesModels = await VehicleModel.findAll({
                         where: { vehicleTypeId: id },
                     });
+
+    console.log("Vehicle vehiclesModels",vehiclesModels);
+
         return res.status(200).json({
             success: true,
             data: vehiclesModels,
