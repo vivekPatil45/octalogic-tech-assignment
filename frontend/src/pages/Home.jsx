@@ -32,6 +32,7 @@ const Home = () => {
             <Box
                 sx={{
                 textAlign: "center",
+                boxShadow:"2",
                 py: { xs: 4, md: 12 },
                 px: { xs: 2, md: 6 },
                 backgroundColor: theme.palette.mode === "dark" ? "#1b1b1b" : "#e8f5e9",
@@ -88,7 +89,7 @@ const Home = () => {
                         sm={6}
                         md={4}
                         key={index}
-                        sx={{ display: "flex", alignItems:"center",justifyContent:"center"}} // makes Paper stretch
+                        sx={{ display: "flex", alignItems:"center",justifyContent:"center"}} 
                     >
                         <Paper
                             elevation={3}
