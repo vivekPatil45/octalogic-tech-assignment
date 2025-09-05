@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { Booking } from "../models/booking.model.js";
 
 
@@ -10,72 +11,72 @@ const createBooking = async (req, res) => {
         vehicleType,
         wheels,
         startDate,
-        vehicleTypeName,
         endDate,
+        vehicleTypeName,
         vehicleModelName,
     } = req.body;
 
-    if (
-        !firstName ||
-        !lastName ||
-        !vehicleModel ||
-        !vehicleType ||
-        !wheels ||
-        !startDate ||
-        !endDate
-    ) {
+    if (!firstName || !lastName || !vehicleModel || !vehicleType || !wheels || !startDate || !endDate) {
         return res.status(400).json({
         success: false,
-        message:
-            "Please provide all fields: firstName, lastName, vehicleType, wheels, startDate, endDate",
+        message: "Please provide all fields: firstName, lastName, vehicleType, wheels, startDate, endDate",
         });
     }
+
     try {
-        const bookingExists = await Booking.findOne({
-            where: {
-                firstName,
-                lastName,
-                vehicleTypeId: vehicleType,
-                vehicleModelId: vehicleModel,
-                vehicleTypeName,
-                vehicleModelName,
+        
+        const overlappingBooking = await Booking.findOne({
+        where: {
+            vehicleModelId: vehicleModel,
+            [Op.or]: [
+            {
+                startDate: { [Op.between]: [startDate, endDate] },
             },
+            {
+                endDate: { [Op.between]: [startDate, endDate] },
+            },
+            {
+                startDate: { [Op.lte]: startDate },
+                endDate: { [Op.gte]: endDate },
+            },
+            ],
+        },
         });
 
-        if (bookingExists) {
-            return res.status(400).json({
-                success: false,
-                message: "User already booked!",
-            });
+        if (overlappingBooking) {
+        return res.status(409).json({
+            success: false,
+            message: "This vehicle is already booked for the selected dates. Please choose different dates or vehicle.",
+        });
         }
 
+        // Create new booking
         const newBooking = await Booking.create({
-            firstName,
-            lastName,
-            vehicleModelId: vehicleModel,
-            vehicleTypeId: vehicleType,
-            wheelId: wheels,
-            startDate,
-            endDate,
-            vehicleTypeName,
-            vehicleModelName,
+        firstName,
+        lastName,
+        vehicleModelId: vehicleModel,
+        vehicleTypeId: vehicleType,
+        wheelId: wheels,
+        startDate,
+        endDate,
+        vehicleTypeName,
+        vehicleModelName,
         });
 
         return res.status(201).json({
-            success: true,
-            message: "Booking created successfully",
-            booking: newBooking,
+        success: true,
+        message: "Booking created successfully",
+        booking: newBooking,
         });
     } catch (error) {
         console.error("Error creating booking:", error);
         return res.status(500).json({
-            success: false,
-            message: "Failed to create booking",
-            error: error.message,
+        success: false,
+        message: "Failed to create booking",
+        error: error.message,
         });
     }
-}
-
+};
 
 const getBookedData = async (req, res) => {
     try {

@@ -149,13 +149,23 @@ const BookingForm = () => {
             });
             navigate("/all-bookings");
         } catch (err) {
-            console.error(err);
-            Swal.fire({
-                icon: "error",
-                title: "Booking Failed",
-                text: "Please try again ❌",
-                confirmButtonText: "Close",
-            });
+            
+            if (err.response && err.response.status === 409) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Booking Overlap!",
+                    text: err.response.data.message || "This vehicle is already booked for the selected dates.",
+                    confirmButtonText: "Close",
+                });
+            } else {
+                // Other errors
+                Swal.fire({
+                    icon: "error",
+                    title: "Booking Failed",
+                    text: "Please try again ❌",
+                    confirmButtonText: "Close",
+                });
+            }
         }
     };
 
