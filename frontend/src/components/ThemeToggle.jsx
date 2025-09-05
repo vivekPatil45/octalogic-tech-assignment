@@ -21,8 +21,8 @@ const ThemeToggle = () => {
           "&:hover": {
             bgcolor:
               theme.palette.mode === "dark"
-                ? "rgba(129, 199, 132, 0.15)" // soft green tint in dark
-                : "rgba(46, 125, 50, 0.1)", // soft deep green tint in light
+                ? "rgba(129, 199, 132, 0.15)" 
+                : "rgba(46, 125, 50, 0.1)", 
           },
         }}
       >

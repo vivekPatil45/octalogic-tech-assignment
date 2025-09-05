@@ -1,19 +1,30 @@
-import { createContext, useMemo, useState, useContext } from "react";
+import { createContext, useMemo, useState, useContext, useEffect } from "react";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 
 const ThemeContext = createContext();
 
 export function ThemeProviderWrapper({ children }) {
-  const [mode, setMode] = useState("light");
-
+  const [mode, setMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("appTheme") || "light";
+    }
+    return "light";
+  });
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+        setMode((prevMode) => {
+          const newMode = prevMode === "light" ? "dark" : "light";
+          localStorage.setItem("appTheme", newMode); // persist to localStorage
+          return newMode;
+        });
       },
     }),
     []
   );
+  useEffect(() => {
+    localStorage.setItem("appTheme", mode);
+  }, [mode]);
 
   const theme = useMemo(
     () =>
@@ -24,15 +35,15 @@ export function ThemeProviderWrapper({ children }) {
             ? {
                 //  Light Mode
                 primary: {
-                  main: "#2E7D32", // Deep green
-                  light: "#66BB6A", // Fresh light green
-                  dark: "#1B5E20", // Rich dark green
+                  main: "#2E7D32", 
+                  light: "#66BB6A", 
+                  dark: "#1B5E20", 
                 },
                 secondary: {
-                  main: "#388E3C", // Complementary green
+                  main: "#388E3C", 
                 },
                 background: {
-                  default: "#F9FAF9", // Soft off-white
+                  default: "#F9FAF9", 
                   paper: "#FFFFFF",
                 },
                 text: {
@@ -51,7 +62,7 @@ export function ThemeProviderWrapper({ children }) {
                   main: "#66BB6A",
                 },
                 background: {
-                  default: "#121212", // True dark
+                  default: "#121212",
                   paper: "#1E1E1E",
                 },
                 text: {
