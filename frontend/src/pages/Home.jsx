@@ -27,7 +27,7 @@ const Home = () => {
     const theme = useTheme();
 
     return (
-        <Box sx={{ mt: { xs: 2, md: 4 }, px: { xs: 2, md: 0 } }}>
+        <Box minHeight="90vh" sx={{ mt: { xs: 2, md: 4 }, px: { xs: 2, md: 0 } }}>
             {/* Hero Section */}
             <Box
                 sx={{
