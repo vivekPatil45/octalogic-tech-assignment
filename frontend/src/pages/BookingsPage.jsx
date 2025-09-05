@@ -87,7 +87,7 @@ const BookingsPage = () => {
     return (
         <Box sx={{ py: { xs: 3, md: 5 }, px: { xs: 2, md: 0 } }}>
             <Grid container spacing={{ xs: 2, md: 4 }}>
-                {bookingData.map((booking) => (
+                {bookings.map((booking) => (
                 <Grid item xs={12} sm={6} md={4} key={booking.id} sx={{ display: "flex" }}>
                     <Card
                         sx={{
@@ -96,9 +96,9 @@ const BookingsPage = () => {
                             boxShadow: 6,
                             display: "flex",
                             flexDirection: "column",
-                            justifyContent: "space-evenly",
+                            justifyContent: "center",
                             alignItems:"center",
-                            // gap: "20px",
+                            width:"14rem",
                             transition: "transform 0.3s, background 0.3s",
                             "&:hover": {
                             transform: "scale(1.05)",
